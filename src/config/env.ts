@@ -2,7 +2,7 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  PORT: z.coerce.number().default(3000),
+  PORT: z.coerce.number().default(3001),
   DB_HOST: z.string().default("localhost"),
   DB_PORT: z.coerce.number().default(3306),
   DB_USER: z.string().default("root"),

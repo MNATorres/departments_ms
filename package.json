@@ -11,16 +11,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MNATorres/typescript-exercises.git"
+    "url": "git+https://github.com/MNATorres/departments_ms.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Matias Torres",
   "license": "ISC",
   "type": "module",
-  "bugs": {
-    "url": "https://github.com/MNATorres/typescript-exercises/issues"
-  },
-  "homepage": "https://github.com/MNATorres/typescript-exercises#readme",
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

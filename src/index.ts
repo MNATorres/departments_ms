@@ -14,6 +14,11 @@ async function bootstrap() {
     await testDatabaseConnection();
     console.log("📁 Database connection successfully established.");
 
+    // Ruta principal (root) que saluda al usuario
+    app.get("/", (_req, res) => {
+      res.send("bienvenidos a departments api");
+    });
+
     // Aquí acoplaremos las rutas globales una vez que la DB esté lista
     app.use("/api", apiRouter);
 
