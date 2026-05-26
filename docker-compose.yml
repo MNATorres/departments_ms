@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: departments-ms-db
+    restart: always
+    working_dir: /docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - departments_mysql_data:/var/lib/mysql
+    command: --local-infile=1
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: departments-ms-pma
+    restart: always
+    ports:
+      - "8082:80" # Accederás vía http://localhost:8082
+    environment:
+      PMA_HOST: db # Se conecta al servicio 'db' definido arriba
+      PMA_ARBITRARY: 1
+    depends_on:
+      - db
+
+volumes:
+  departments_mysql_data:
