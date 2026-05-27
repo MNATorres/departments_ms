@@ -1,5 +1,6 @@
 import { departmentsRepo } from "../repository/departments.repository.js";
 import type { Department } from "../types/entities.type.js";
+import { publishEvent } from "../config/queue.js";
 
 interface ServiceResponse {
   message: string;
@@ -24,4 +25,24 @@ const findByNumber = async (number: string): Promise<ServiceResponse> => {
   };
 };
 
-export { getAllDepartments, findByNumber };
+const createDepartment = async (deptNo: string, deptName: string) => {
+  // 1. Guardamos el nuevo departamento en la base de datos de departamentos
+  const result = await departmentsRepo.create({
+    dept_no: deptNo,
+    dept_name: deptName,
+  });
+
+  // 2. ─── EL GRITO DE PUB/SUB ───
+  // Si la DB guardó todo bien, le avisamos al broker enviando el ID y el Nombre
+  publishEvent("DEPARTMENT_CREATED", {
+    dept_no: deptNo,
+    dept_name: deptName,
+  });
+
+  return {
+    message: "Departamento creado con éxito y evento notificado.",
+    data: result,
+  };
+};
+
+export { getAllDepartments, findByNumber, createDepartment };

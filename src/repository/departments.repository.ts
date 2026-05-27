@@ -15,6 +15,13 @@ class DepartmentsRepository extends BaseRepository<Department> {
 
     return rows as Department[];
   }
+
+  async create(dept: Department): Promise<void> {
+    await this.pool.query(
+      `INSERT INTO ${this.tableName} (dept_no, dept_name) VALUES (?, ?)`,
+      [dept.dept_no, dept.dept_name],
+    );
+  }
 }
 
 export const departmentsRepo = new DepartmentsRepository();

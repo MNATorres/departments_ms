@@ -3,6 +3,7 @@ import express from "express";
 import { testDatabaseConnection } from "./config/database.js";
 import { ENV } from "./config/env.js";
 import { apiRouter } from "./routes/index.js";
+import { connectQueue } from "./config/queue.js";
 
 const app = express();
 const PORT = ENV.PORT;
@@ -13,6 +14,8 @@ async function bootstrap() {
   try {
     await testDatabaseConnection();
     console.log("📁 Database connection successfully established.");
+
+    await connectQueue();
 
     // Ruta principal (root) que saluda al usuario
     app.get("/", (_req, res) => {
