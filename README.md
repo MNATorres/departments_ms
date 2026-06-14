@@ -30,7 +30,7 @@ This project is part of a larger microservices ecosystem. For a complete local t
 
 *   **API Gateway:** [employees_api_gateway](https://github.com/MNATorres/employees_api_gateway.git)
 *   **Departments Microservice (This repo):** [departments_ms](https://github.com/MNATorres/departments_ms.git)
-*   **Employees Microservice:** [typescript-exercises](https://github.com/MNATorres/typescript-exercises.git)
+*   **Employees Microservice:** [employees_ms](https://github.com/MNATorres/employees_ms.git)
 *   **PDF Generator (AWS Lambda):** [pdf_generator_employees](https://github.com/MNATorres/pdf_generator_employees.git)
 *   **Reports Infrastructure (Terraform):** [reports_infra_ms](https://github.com/MNATorres/reports_infra_ms.git)
 
@@ -48,10 +48,13 @@ graph TD
     GW -->|/api/departments/*| MS_Dept["🏢 Departments MS: Port 3001<br>📍 YOU ARE HERE"]
     GW -->|/api/employees/*| MS_Emp[👥 Employees MS: Port 3000]
     
+    %% Databases locales
+    MS_Dept -->|Write / Read| DB_Dept[(💾 Departments MySQL DB: Port 3307 <br> - departments table)]
+    MS_Emp -->|Write / Read| DB_Emp[(💾 Employees MySQL DB: Port 3306 <br> - employees, salaries, titles <br> - departments_cache table)]
+    
     %% Pub/Sub
     MS_Dept -->|1. Publish: DEPARTMENT_CREATED| RMQ[🐇 RabbitMQ Broker: Port 5672]
     RMQ -->|2. Consume Event| MS_Emp
-    MS_Emp -->|3. Update Cache Table| DB_Emp[(💾 Employees MySQL DB: Port 3306)]
     
     %% Reportes
     MS_Emp -->|4. Publish: reportId & employees| RMQ
@@ -65,11 +68,13 @@ graph TD
     classDef current fill:#ffcc00,stroke:#ff6600,stroke-width:4px,color:#000000;
     classDef gateway fill:#1f6feb,stroke:#58a6ff,stroke-width:2px,color:#ffffff;
     classDef service fill:#238636,stroke:#2ea043,stroke-width:1px,color:#ffffff;
+    classDef database fill:#4479A1,stroke:#005F9E,stroke-width:2px,color:#ffffff;
     classDef broker fill:#d2691e,stroke:#ff8c00,stroke-width:2px,color:#ffffff;
     classDef aws fill:#e05c2b,stroke:#ff9900,stroke-width:2px,color:#ffffff;
     
     class MS_Dept current;
     class GW,MS_Emp service;
+    class DB_Dept,DB_Emp database;
     class RMQ broker;
     class Lambda,S3,Infra aws;
 ```
